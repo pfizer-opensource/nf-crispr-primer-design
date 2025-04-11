@@ -1,0 +1,132 @@
+repository_type: pipeline
+
+nf_core_version: 3.1.1
+
+lint:
+  files_unchanged:
+    - .github/ISSUE_TEMPLATE/bug_report.yml
+    - .github/ISSUE_TEMPLATE/config.yml
+    - .github/ISSUE_TEMPLATE/feature_request.yml
+    - .github/PULL_REQUEST_TEMPLATE.md
+    - .github/workflows/branch.yml
+    - .github/workflows/linting_comment.yml
+    - .github/workflows/linting.yml
+    - .github/CONTRIBUTING.md
+    - .github/.dockstore.yml
+    - .github/CONTRIBUTING.md
+    - assets/sendmail_template.txt
+    - LICENSE
+    - .prettierignore
+    - .prettierignore
+    - .prettierignore
+    - .github/CONTRIBUTING.md
+    - .github/PULL_REQUEST_TEMPLATE.md
+    - .prettierignore
+    - .github/ISSUE_TEMPLATE/bug_report.yml
+    - .github/ISSUE_TEMPLATE/config.yml
+    - .github/ISSUE_TEMPLATE/feature_request.yml
+    - .github/PULL_REQUEST_TEMPLATE.md
+    - .github/workflows/branch.yml
+    - .github/workflows/linting_comment.yml
+    - .github/workflows/linting.yml
+    - .github/CONTRIBUTING.md
+    - .github/.dockstore.yml
+    - .github/CONTRIBUTING.md
+    - assets/sendmail_template.txt
+    - LICENSE
+    - .prettierignore
+    - .prettierignore
+    - .prettierignore
+    - .github/CONTRIBUTING.md
+    - .github/PULL_REQUEST_TEMPLATE.md
+    - .prettierignore
+    - CODE_OF_CONDUCT.md
+    - assets/nf-core-nf-crispr-primer-design_logo_light.png
+    - docs/images/nf-core-nf-crispr-primer-design_logo_light.png
+    - docs/images/nf-core-nf-crispr-primer-design_logo_dark.png
+    - .github/ISSUE_TEMPLATE/bug_report.yml
+    - .github/CONTRIBUTING.md
+    - .github/PULL_REQUEST_TEMPLATE.md
+    - assets/email_template.txt
+    - docs/README.md
+  nextflow_config: false
+  multiqc_config: false
+  files_exist:
+    - .github/ISSUE_TEMPLATE/bug_report.yml
+    - .github/ISSUE_TEMPLATE/feature_request.yml
+    - .github/PULL_REQUEST_TEMPLATE.md
+    - .github/CONTRIBUTING.md
+    - .github/.dockstore.yml
+    - .github/workflows/branch.yml
+    - .github/workflows/ci.yml
+    - .github/workflows/linting_comment.yml
+    - .github/workflows/linting.yml
+    - conf/igenomes.config
+    - .editorconfig
+    - .prettierignore
+    - .prettierrc.yml
+    - assets/multiqc_config.yml
+    - LICENSE
+    - assets/email_template.html
+    - assets/sendmail_template.txt
+    - assets/email_template.txt
+    - conf/test.config
+    - conf/test_full.config
+    - .github/workflows/ci.yml
+    - .github/ISSUE_TEMPLATE/bug_report.yml
+    - .github/ISSUE_TEMPLATE/feature_request.yml
+    - .github/PULL_REQUEST_TEMPLATE.md
+    - .github/CONTRIBUTING.md
+    - .github/.dockstore.yml
+    - .github/workflows/branch.yml
+    - .github/workflows/ci.yml
+    - .github/workflows/linting_comment.yml
+    - .github/workflows/linting.yml
+    - .editorconfig
+    - .prettierignore
+    - .prettierrc.yml
+    - assets/multiqc_config.yml
+    - LICENSE
+    - assets/email_template.html
+    - assets/sendmail_template.txt
+    - assets/email_template.txt
+    - conf/test.config
+    - conf/test_full.config
+    - .github/workflows/ci.yml
+    - CODE_OF_CONDUCT.md
+    - assets/nf-core-nf-crispr-primer-design_logo_light.png
+    - docs/images/nf-core-nf-crispr-primer-design_logo_light.png
+    - docs/images/nf-core-nf-crispr-primer-design_logo_dark.png
+    - .github/ISSUE_TEMPLATE/config.yml
+    - .github/workflows/awstest.yml
+    - .github/workflows/awsfulltest.yml
+  readme:
+    - nextflow_badge
+    - nextflow_badge
+    - nextflow_badge
+  included_configs: false
+
+template:
+  org: pfizer-rd
+  name: nf-crispr-primer-design
+  description: Primer design for sequencing CRISPR target sites
+  author: Jason Arroyo
+  version: 1.0.0dev
+  force: true
+  outdir: .
+  skip_features:
+    - github
+    - ci
+    - github_badges
+    - nf_core_configs
+    - code_linters
+    - gitpod
+    - multiqc
+    - fastqc
+    - license
+    - email
+    - adaptivecard
+    - slackreport
+    - test_config
+    - rocrate
+  is_nfcore: false
