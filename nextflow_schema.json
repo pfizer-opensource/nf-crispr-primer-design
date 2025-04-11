@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/pfizer-opensource/nf-crispr-primer-design/master/nextflow_schema.json",
+    "$id": "https://raw.githubusercontent.com/pfizer-opensource/nf-crispr-primer-design/main/nextflow_schema.json",
     "title": "pfizer-opensource/nf-crispr-primer-design pipeline parameters",
     "description": "Primer design for sequencing CRISPR target sites",
     "type": "object",
@@ -10,24 +10,41 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": ["input", "outdir"],
+            "required": [
+                "input",
+                "outdir",
+                "prefix"
+            ],
             "properties": {
                 "input": {
                     "type": "string",
                     "format": "file-path",
                     "exists": true,
-                    "schema": "assets/schema_input.json",
-                    "mimetype": "text/csv",
-                    "pattern": "^\\S+\\.csv$",
-                    "description": "Path to comma-separated file containing information about the samples in the experiment.",
-                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row.",
+                    "mimetype": "text/plain",
+                    "pattern": "^\\S+\\.txt",
+                    "description": "Path to input file (tab-delimited text) with guide ID and sequence columns.",
                     "fa_icon": "fas fa-file-csv"
                 },
                 "outdir": {
                     "type": "string",
                     "format": "directory-path",
-                    "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
+                    "description": "The output directory where the results will be saved.",
                     "fa_icon": "fas fa-folder-open"
+                },
+                "prefix": {
+                    "type": "string",
+                    "description": "Prefix added to the output file names.",
+                    "fa_icon": "far fa-file-code"
+                },
+                "amplicons": {
+                    "type": "boolean",
+                    "description": "Generate amplicons.yaml output file",
+                    "default": true
+                },
+                "keep_all_columns": {
+                    "type": "boolean",
+                    "description": "Keep all input columns in output file",
+                    "default": false
                 }
             }
         },
@@ -36,12 +53,19 @@
             "type": "object",
             "fa_icon": "fas fa-dna",
             "description": "Reference genome related files and options required for the workflow.",
+            "required": [
+                "genome"
+            ],
             "properties": {
                 "genome": {
                     "type": "string",
-                    "description": "Name of iGenomes reference.",
-                    "fa_icon": "fas fa-book",
-                    "help_text": "If using a reference genome configured in the pipeline using iGenomes, use this parameter to give the ID for the reference. This is then used to build the full paths for all required reference genome files e.g. `--genome GRCh38`. \n\nSee the [nf-core website docs](https://nf-co.re/usage/reference_genomes) for more details."
+                    "description": "Reference genome ID",
+                    "enum": [
+                        "GRCh37",
+                        "GRCh38",
+                        "GRCm38"
+                    ],
+                    "fa_icon": "fas fa-book"
                 },
                 "fasta": {
                     "type": "string",
@@ -51,7 +75,8 @@
                     "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
                     "description": "Path to FASTA genome file.",
                     "help_text": "This parameter is *mandatory* if `--genome` is not specified. If you don't have a BWA index available this will be generated for you automatically. Combine with `--save_reference` to save BWA index for future runs.",
-                    "fa_icon": "far fa-file-code"
+                    "fa_icon": "far fa-file-code",
+                    "hidden": true
                 },
                 "igenomes_ignore": {
                     "type": "boolean",
@@ -67,7 +92,113 @@
                     "fa_icon": "fas fa-ban",
                     "hidden": true,
                     "default": "s3://ngi-igenomes/igenomes/"
+                },
+                "coding": {
+                    "type": "string",
+                    "description": "Name of coding exon definitions to use when making amplicons.yaml file, or blank to not include coding exon information in the file."
                 }
+            }
+        },
+        "input_format_options": {
+            "title": "Input file format options",
+            "type": "object",
+            "properties": {
+                "id_col": {
+                    "type": "integer",
+                    "description": "Column of input containing the guide ID"
+                },
+                "seq_col": {
+                    "type": "integer",
+                    "description": "Column of input containing the guide sequence"
+                },
+                "chr_col": {
+                    "type": "integer",
+                    "description": "Column of input containing the chromosome of the guide if already determined"
+                },
+                "pos_col": {
+                    "type": "integer",
+                    "description": "Column of input containing the genomic position of the guide if already determined"
+                },
+                "strand_col": {
+                    "type": "integer",
+                    "description": "Column of input containing the genomic strand of the guide if already determined"
+                }
+            }
+        },
+        "primer_design_options": {
+            "title": "Primer design options",
+            "type": "object",
+            "properties": {
+                "size_range": {
+                    "type": "string",
+                    "title": "Amplicon size range(s)",
+                    "description": "Space-separated list of amplicon size ranges ('min-max') to use for primer design. Ranges listed earlier are preferred over later ranges",
+                    "default": "125-280 280-400 400-600"
+                },
+                "size_opt": {
+                    "type": "integer",
+                    "description": "Optimal size for the amplicon",
+                    "default": 250
+                },
+                "target": {
+                    "type": "integer",
+                    "title": "Target window",
+                    "description": "Number of base pairs centered on the guide that must be included within the amplicon",
+                    "default": 100
+                },
+                "flanking": {
+                    "type": "integer",
+                    "title": "Flanking region",
+                    "description": "Number of base pairs on either side of guide to search for primer designs",
+                    "default": 500
+                },
+                "num_pairs": {
+                    "type": "integer",
+                    "title": "Number of primer pairs",
+                    "description": "Number of primer pairs to design per guide",
+                    "default": 1
+                },
+                "primer_opt": {
+                    "type": "integer",
+                    "description": "Optimum primer length",
+                    "default": 20
+                },
+                "primer_min": {
+                    "type": "integer",
+                    "description": "Minimum primer length",
+                    "default": 18
+                },
+                "primer_max": {
+                    "type": "integer",
+                    "description": "Maximum primer length",
+                    "default": 24
+                },
+                "max_poly_x": {
+                    "type": "integer",
+                    "description": "Maximum allowed length of a mononucleotide repeat in a primer",
+                    "default": 4
+                }
+            }
+        },
+        "ngs_adapters_options": {
+            "title": "NGS primer options",
+            "type": "object",
+            "properties": {
+                "ngs_adapters": {
+                    "type": "string"
+                },
+                "ngs_min_n": {
+                    "type": "integer",
+                    "default": 4
+                },
+                "ngs_max_n": {
+                    "type": "integer",
+                    "default": 6
+                },
+                "ngs_max_length": {
+                    "type": "integer",
+                    "default": 60
+                }    
             }
         },
         "generic_options": {
@@ -120,6 +251,15 @@
         },
         {
             "$ref": "#/$defs/reference_genome_options"
+        },
+        {
+            "$ref": "#/$defs/input_format_options"
+        },
+        {
+            "$ref": "#/$defs/primer_design_options"
+        },
+        {
+            "$ref": "#/$defs/ngs_adapters_options"
         },
         {
             "$ref": "#/$defs/generic_options"

@@ -3,23 +3,30 @@
     IMPORT MODULES / SUBWORKFLOWS / FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-include { paramsSummaryMap       } from 'plugin/nf-schema'
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_nf-crispr-primer-design_pipeline'
 
+include { PRIMER_DESIGN } from '../modules/local/primer-design'
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     RUN MAIN WORKFLOW
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-workflow NF-CRISPR-PRIMER-DESIGN {
+workflow CRISPR_PRIMER_DESIGN {
 
     take:
-    ch_samplesheet // channel: samplesheet read in from --input
+    ch_input // channel: input file
+
     main:
 
     ch_versions = Channel.empty()
+
+    // Run primer design tool
+    PRIMER_DESIGN(
+        Channel.of([:]).merge(ch_input),
+        params.genome
+    )
+    ch_versions = ch_versions.mix(PRIMER_DESIGN.out.versions)
 
     //
     // Collate and save software versions
