@@ -5,16 +5,18 @@ process PRIMER_DESIGN {
     input:
         tuple val(meta), path(guide_table)
         val reference
+        path config
 
     output:
-        path "${prefix}_CRISPR_primers.txt",     emit: primers
-        path "${prefix}_CRISPR_primers_NGS.txt", emit: NGS_primers, optional: true
-        path "${prefix}_amplicons.yaml",         emit: amplicons, optional: true
-        path "${prefix}_CRISPR_primers.bed",     emit: bed, optional: true
-        path "versions.yml",                     emit: versions
+        path "*_CRISPR_primers.txt",     emit: primers
+        path "*_CRISPR_primers_NGS.txt", emit: NGS_primers, optional: true
+        path "*_amplicons.yaml",         emit: amplicons, optional: true
+        path "*_CRISPR_primers.bed",     emit: bed, optional: true
+        path "versions.yml",             emit: versions
 
     script:
         def args = task.ext.args ?: ''
+        args += config ? " --config ${config}" : ""
         def prefix = task.ext.prefix ?: "${meta.id}"
 
         """

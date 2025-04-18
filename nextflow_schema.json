@@ -67,15 +67,11 @@
                     ],
                     "fa_icon": "fas fa-book"
                 },
-                "fasta": {
+                "genomes_dir": {
                     "type": "string",
-                    "format": "file-path",
-                    "exists": true,
-                    "mimetype": "text/plain",
-                    "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
-                    "description": "Path to FASTA genome file.",
-                    "help_text": "This parameter is *mandatory* if `--genome` is not specified. If you don't have a BWA index available this will be generated for you automatically. Combine with `--save_reference` to save BWA index for future runs.",
-                    "fa_icon": "far fa-file-code",
+                    "description": "Reference genomes base directory",
+                    "default": "ref_genomes",
+                    "format": "directory-path",
                     "hidden": true
                 },
                 "igenomes_ignore": {
@@ -94,8 +90,9 @@
                     "default": "s3://ngi-igenomes/igenomes/"
                 },
                 "coding": {
-                    "type": "string",
-                    "description": "Name of coding exon definitions to use when making amplicons.yaml file, or blank to not include coding exon information in the file."
+                    "type": "boolean",
+                    "description": "Include coding exon definitions in the amplicons.yaml file.",
+                    "default": true
                 }
             }
         },
@@ -185,18 +182,27 @@
             "type": "object",
             "properties": {
                 "ngs_adapters": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Name of NGS adapters to append to primers, or none to not add adapter sequences.",
+                    "enum": [
+                        "Nextera",
+                        "none"
+                    ],
+                    "default": "Nextera"
                 },
                 "ngs_min_n": {
                     "type": "integer",
+                    "description": "Minimum number of N bases to include in NGS primer design to add early read complexity.",
                     "default": 4
                 },
                 "ngs_max_n": {
                     "type": "integer",
+                    "description": "Maximum number of N bases to include in NGS primer design to add early read complexity.",
                     "default": 6
                 },
                 "ngs_max_length": {
                     "type": "integer",
+                    "description": "Maximum NGS primer length with adapter and N's for early read complexity.",
                     "default": 60
                 }    
             }
