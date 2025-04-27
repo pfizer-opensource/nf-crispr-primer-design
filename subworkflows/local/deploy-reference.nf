@@ -30,20 +30,20 @@ workflow DEPLOY_REFERENCE {
 
     // Map of genome reference source files
     ref_sources = [
-        fasta: getGenomeAttribute('fasta'),
-        faidx: getGenomeAttribute('fasta') + '.fai',
-        bowtie2_1: getGenomeAttribute('bowtie2') + '/genome.1.bt2',
-        bowtie2_2: getGenomeAttribute('bowtie2') + '/genome.2.bt2',
-        bowtie2_3: getGenomeAttribute('bowtie2') + '/genome.3.bt2',
-        bowtie2_4: getGenomeAttribute('bowtie2') + '/genome.4.bt2',
-        bowtie2_r1: getGenomeAttribute('bowtie2') + '/genome.rev.1.bt2',
-        bowtie2_r2: getGenomeAttribute('bowtie2') + '/genome.rev.2.bt2',
-        gtf: getGenomeAttribute('gtf')
+        fasta: file(getGenomeAttribute('fasta')),
+        faidx: file(getGenomeAttribute('fasta') + '.fai'),
+        bowtie2_1: file(getGenomeAttribute('bowtie2') + '/genome.1.bt2'),
+        bowtie2_2: file(getGenomeAttribute('bowtie2') + '/genome.2.bt2'),
+        bowtie2_3: file(getGenomeAttribute('bowtie2') + '/genome.3.bt2'),
+        bowtie2_4: file(getGenomeAttribute('bowtie2') + '/genome.4.bt2'),
+        bowtie2_r1: file(getGenomeAttribute('bowtie2') + '/genome.rev.1.bt2'),
+        bowtie2_r2: file(getGenomeAttribute('bowtie2') + '/genome.rev.2.bt2'),
+        gtf: file(getGenomeAttribute('gtf'))
     ]
 
     // Map of genome reference files on local storage
     ref_files = ref_sources.collectEntries { key, source ->
-        [ key, genome_dir / "${file(source).name}" ]
+        [ key, genome_dir / "${source.name}" ]
     }
     // Additional files that are generated from other reference files
     ref_files += [

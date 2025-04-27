@@ -1,0 +1,63 @@
+{
+    "NGS Adapters - Nextera": {
+        "content": [
+            "test_CRISPR_primers.txt:md5,d6bd29ced1fe9f2cbe725ef53860a502",
+            "test_CRISPR_primers.bed:md5,781883daf7d0e6ddaab1de71c515de41",
+            "test_amplicons.yaml:md5,ef542dccfb342aec33e49e45b8add78f",
+            "test_CRISPR_primers_NGS.txt:md5,31c54b2a85dc53b3fe096c8d8e625d85"
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "23.04.2"
+        },
+        "timestamp": "2025-04-27T19:07:25.361785"
+    },
+    "Input Columns - Keep Extra Input": {
+        "content": [
+            "test_CRISPR_primers.txt:md5,0f49f28e976de8d469ab2fb94d51fb34",
+            "test_CRISPR_primers.bed:md5,781883daf7d0e6ddaab1de71c515de41",
+            "test_amplicons.yaml:md5,ef542dccfb342aec33e49e45b8add78f"
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "23.04.2"
+        },
+        "timestamp": "2025-04-27T19:08:53.932205"
+    },
+    "NGS Adapters - None": {
+        "content": [
+            "test_CRISPR_primers.txt:md5,d6bd29ced1fe9f2cbe725ef53860a502",
+            "test_CRISPR_primers.bed:md5,781883daf7d0e6ddaab1de71c515de41",
+            "test_amplicons.yaml:md5,ef542dccfb342aec33e49e45b8add78f"
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "23.04.2"
+        },
+        "timestamp": "2025-04-27T19:07:57.942731"
+    },
+    "Pipeline Defaults": {
+        "content": [
+            "test_CRISPR_primers.txt:md5,d6bd29ced1fe9f2cbe725ef53860a502",
+            "test_CRISPR_primers.bed:md5,781883daf7d0e6ddaab1de71c515de41",
+            "test_amplicons.yaml:md5,ef542dccfb342aec33e49e45b8add78f"
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "23.04.2"
+        },
+        "timestamp": "2025-04-27T19:06:57.54318"
+    },
+    "Input Columns - Non-default Indexes": {
+        "content": [
+            "test_CRISPR_primers.txt:md5,d6bd29ced1fe9f2cbe725ef53860a502",
+            "test_CRISPR_primers.bed:md5,781883daf7d0e6ddaab1de71c515de41",
+            "test_amplicons.yaml:md5,ef542dccfb342aec33e49e45b8add78f"
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "23.04.2"
+        },
+        "timestamp": "2025-04-27T19:08:25.113497"
+    }
+}

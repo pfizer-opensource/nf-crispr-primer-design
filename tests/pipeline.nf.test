@@ -1,0 +1,157 @@
+def testDataDir = "tests/input_files"
+
+nextflow_pipeline {
+
+    name "Test Pipeline"
+    tag "pipeline"
+    script "main.nf"
+
+    test("Pipeline Defaults") {
+        tag "pipeline_defaults"
+        tag "minimal"
+
+        when {
+            params {
+                input       = "${baseDir}/${testDataDir}/test_guides.txt"
+                genome      = "GRCh38"
+                genomes_dir = "${baseDir}/ref_genomes"
+                outdir      = "${outputDir}"
+                prefix      = "test"
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    path("${outputDir}/test_CRISPR_primers.txt"),
+                    path("${outputDir}/test_CRISPR_primers.bed"),
+                    path("${outputDir}/test_amplicons.yaml"),
+                ).match() },
+            )
+        }
+    }
+
+    test("NGS Adapters - Nextera") {
+        tag "ngs_adapters"
+        tag "ngs_adapters_nextera"
+        tag "minimal"
+
+        when {
+            params {
+                input       = "${baseDir}/${testDataDir}/test_guides.txt"
+                genome      = "GRCh38"
+                genomes_dir = "${baseDir}/ref_genomes"
+                outdir      = "${outputDir}"
+                prefix      = "test"
+
+                ngs_adapters = "Nextera"
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    path("${outputDir}/test_CRISPR_primers.txt"),
+                    path("${outputDir}/test_CRISPR_primers.bed"),
+                    path("${outputDir}/test_amplicons.yaml"),
+                    path("${outputDir}/test_CRISPR_primers_NGS.txt"),
+                ).match() },
+            )
+        }
+    }
+
+    test("NGS Adapters - None") {
+        tag "ngs_adapters"
+        tag "ngs_adapters_none"
+
+        when {
+            params {
+                input       = "${baseDir}/${testDataDir}/test_guides.txt"
+                genome      = "GRCh38"
+                genomes_dir = "${baseDir}/ref_genomes"
+                outdir      = "${outputDir}"
+                prefix      = "test"
+
+                ngs_adapters = "none"
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    path("${outputDir}/test_CRISPR_primers.txt"),
+                    path("${outputDir}/test_CRISPR_primers.bed"),
+                    path("${outputDir}/test_amplicons.yaml"),
+                ).match() },
+
+                // Assert NGS adapters output file is not produced
+                { assert ! path("${outputDir}/test_CRISPR_primers_NGS.txt").exists() },
+            )
+        }
+    }
+
+    test("Input Columns - Non-default Indexes") {
+        tag "input_cols_nondefault"
+        tag "input_cols"
+
+        when {
+            params {
+                input       = "${baseDir}/${testDataDir}/test_guides_alt_columns.txt"
+                genome      = "GRCh38"
+                genomes_dir = "${baseDir}/ref_genomes"
+                outdir      = "${outputDir}"
+                prefix      = "test"
+
+                id_col  = 2
+                seq_col = 3
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    path("${outputDir}/test_CRISPR_primers.txt"),
+                    path("${outputDir}/test_CRISPR_primers.bed"),
+                    path("${outputDir}/test_amplicons.yaml"),
+                ).match() },
+
+                // Assert that the bed file has 6 lines (will be fewer if the columns are not correct)
+                { assert path("${outputDir}/test_CRISPR_primers.bed").readLines().size() == 6 }
+            )
+        }
+    }
+
+    test("Input Columns - Keep Extra Input") {
+        tag "input_cols_keep_extra"
+        tag "input_cols"
+
+        when {
+            params {
+                input       = "${baseDir}/${testDataDir}/test_guides_alt_columns.txt"
+                genome      = "GRCh38"
+                genomes_dir = "${baseDir}/ref_genomes"
+                outdir      = "${outputDir}"
+                prefix      = "test"
+
+                id_col           = 2
+                seq_col          = 3
+                keep_all_columns = true
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    path("${outputDir}/test_CRISPR_primers.txt"),
+                    path("${outputDir}/test_CRISPR_primers.bed"),
+                    path("${outputDir}/test_amplicons.yaml"),
+                ).match() },
+            )
+        }
+    }
+}
