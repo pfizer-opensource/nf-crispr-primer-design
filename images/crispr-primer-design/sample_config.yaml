@@ -1,0 +1,94 @@
+primer_design:
+  # Mapping of reference genome definitions.
+  references:
+    # Name for this reference genome.
+    hg19:
+      # FASTA file of the reference genome.
+      fasta: /path/to/hg19.fa
+      # BED files containing coding exons in the reference genome.
+      coding_bed:
+        # Key is the name to use to refer to this coding exon file.
+        refgene: /path/to/refgene_coding_exons.bed
+      # Optional: base name of the genome for the Bowtie2 index. Derived from
+      # genome FASTA file name if not provided in the config.
+      #genome_base: /path/to/hg19
+      # Optional: Name of file containing chromosome sizes for bedtools.
+      # Derived from genome base if this option is not provided.
+      #chrom_sizes: /path/to/hg19.chrom.sizes
+      # Optional: Field to define priority in UI listing.
+      # The higher the priority, the higher the item will appear in the list.
+      priority: 99
+  # Whether to generate an amplicons.yaml file. Can be the name of the file to
+  # produce or true to generate a default file name. False to disable.
+  amplicons: null
+  # The name of the coding exons bed file to use for the selected reference.
+  coding: null
+  # The name of the NGS adapter sequences to use. Null or missing to disable.
+  ngs_adapters: null
+  # Include all input columns in the output file, instead of just the guide
+  # ID and sequence columns.
+  include_input: false
+  # The input format options control how the columns of the input file are
+  # assigned to the guide ID, sequence, chromosome, position, and strand. Most
+  # input files will only contain the guide ID and sequence.
+  input_format:
+    id_col: 1
+    seq_col: 2
+    #chr_col: null
+    #pos_col: null
+    #strand_col: null
+  # Primer design parameters for Primer3
+  parameters:
+    # List of amplicon size ranges, with first range taking highest precedence.
+    size_range: [125-280, 280-400, 400-600]
+    # Amplicon optimal size.
+    size_opt: 250
+    # Target window (number of base pairs centered on the guide that must be included within the amplicon).
+    target: 100
+    # Flanking region (number of base pairs on either side of guide to search for primer designs).
+    flanking: 500
+    # Number of primer pairs to generate.
+    num_pairs: 1
+    # Optimal primer length.
+    primer_opt: 20
+    # Minimal primer length.
+    primer_min: 18
+    # Maximum primer length.
+    primer_max: 24
+    # Maximum allowed length of a mononucleotide repeat in a primer.
+    max_poly_x: 4
+  # NGS configuration
+  ngs:
+    # Mapping of NGS adapter sequences that can be included in the primer design output
+    adapters:
+      # Name for this adapter set.
+      SomeAdapter:
+        # Forward adapter sequence
+        forward: TCGA...
+        # Reverse adapter sequence
+        reverse: AGCT...
+        # Suffix to add to the names of the primers that contain the adapter sequence
+        suffix: suf
+    # Maximum NGS primer length with adapter and N's for early read complexity.
+    # The "min_n" setting takes precedence.
+    max_length: 60
+    # Minimum number of N bases to include in NGS primer design to add early read complexity.
+    min_n: 4
+    # Maximum number of N bases to include in NGS primer design to add early read complexity.
+    max_n: 6
+  # Subcommand configuration
+  subcommands:
+    bowtie2:
+      # Path to binary to execute, or binary name if command is already in the $PATH
+      cmd:
+        - /path/to/bowtie2
+      # List of Lmod modules to load. Can be an empty list or null if no modules required.
+      lmod: [eb/2018, Bowtie2]
+    samtools:
+      cmd:
+        - /path/to/samtools
+      lmod: [eb/2018, SAMtools]
+    bedtools:
+      cmd:
+        - /path/to/bedtools
+      lmod: null

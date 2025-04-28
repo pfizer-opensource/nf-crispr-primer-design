@@ -1,0 +1,3 @@
+[console_scripts]
+CRISPR_primer_design = crispr.primer_design.cli:main
+
