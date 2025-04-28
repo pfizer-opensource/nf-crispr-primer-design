@@ -4,16 +4,53 @@
 
 This document describes the output produced by the pipeline.
 
-The directories listed below will be created in the results directory after the pipeline has finished. All paths are relative to the top-level results directory.
-
-<!-- TODO nf-core: Write this documentation describing your workflow's output -->
+The files and directories listed below will be created in the results directory after the
+pipeline has finished. All paths are relative to the top-level results directory.
 
 ## Pipeline overview
 
 The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes data using the following steps:
 
+- [Reference genome deployed](#reference-genome) - The reference genome is downloaded and
+  prepared if not already stored locallly
+- [Primer design configuration](#primer-design-config) - A configuration file is generated
+  for the primer design tool
+- [Primer design](#primer-design) - The primer design is run
+- [Pipeline information](#pipeline-information) - Report metrics generated during the
+  workflow execution
 
-- [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution
+### Reference genome deployed
+
+The reference genome files are stored in the directory provided by the `genomes_dir`
+parameter. Files for each deployed reference genome are in subdirectories
+named by the genome identifier (ie, `GRCh38`).
+
+### Primer design configuration
+
+A primer design configuration file, containing the paths to the appropriate reference
+genome files and the NGS adapter configuration, is produced internally but is not saved
+in the results directory.
+
+### Primer design
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `[prefix]_CRISPR_primers.txt`: A tab-delimited text file with the target-specific primer
+  designs for each guide sequence
+- `[prefix]_CRISPR_primers.bed`: A BED file with the genomic coordinates of each amplicon
+  and the corresponding guide sequence
+- `[prefix]_CRISPR_primers_NGS.txt` (optional): A tab-delimited text file with the same primer designs
+  with NGS adapter sequences added to the 5' end of each primer.
+- `[prefix]_amplicons.yaml` (optional): A YAML file to be used with the **pfizer-opensource/nf-gene-editing-ngs**
+  pipeline for NGS analysis of gene editing target sites.
+</details>
+
+The pipeline produces text files containing the primers designed for each guide in the
+input file. If a guide cannot be found in the reference file, a line with just the guide
+identifier and sequence but no primer designs is produced. Optional output files include
+primer designs with NGS adapters added and an `amplicons.yaml` file for use with the
+gene editing NGS anlysis pipeline.
 
 ### Pipeline information
 

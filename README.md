@@ -2,38 +2,33 @@
 
 ## Introduction
 
-**pfizer-opensource/nf-crispr-primer-design** is a bioinformatics pipeline that ...
-
-<!-- TODO nf-core:
-   Complete this sentence with a 2-3 sentence summary of what types of data the pipeline ingests, a brief overview of the
-   major pipeline sections and the types of output it produces. You're giving an overview to someone new
-   to nf-core here, in 15-20 seconds. For an example, see https://github.com/nf-core/rnaseq/blob/master/README.md#introduction
--->
-
-<!-- TODO nf-core: Include a figure that guides the user through the major workflow steps. Many nf-core
-     workflows use the "tube map" design for that. See https://nf-co.re/docs/contributing/design_guidelines#examples for examples.   -->
-<!-- TODO nf-core: Fill in short bullet-pointed list of the default steps in the pipeline -->
+**pfizer-opensource/nf-crispr-primer-design** is a bioinformatics pipeline that designs primers
+for sequencing CRISPR-edited target sites. The pipeline takes CRISPR guide sequences as
+input, finds their location in a reference genome, and then designs primers to amplify
+the edited region. In addition to outputing target-specific primers, the pipeline can
+also generate primers with NGS adapter sequences added on. This pipeline is a companion
+to the **pfizer-opensource/nf-gene-editing-ngs** pipeline, and produces an `amplicons.yaml` file
+that is compatible with that gene editing NGS analysis pipeline.
 
 ## Usage
 
 > [!NOTE]
 > If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow.
 
-<!-- TODO nf-core: Describe the minimum required steps to execute the pipeline, e.g. how to prepare samplesheets.
-     Explain what rows and columns represent. For instance (please edit as appropriate):
+The only required input file is a tab-delimited text file with guide identifiers and
+guide sequences. The input data should look like this:
 
-First, prepare a samplesheet with your input data that looks as follows:
+`guides.txt`:
 
-`samplesheet.csv`:
-
-```csv
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
+```tsv
+guide_id	guide_seq
+HPRT-ctrl	AATTATGGGGATTACTAGGA
 ```
 
-Each row represents a fastq file (single-end) or a pair of fastq files (paired end).
+Each row represents a CRISPR guide, and a primer pair will be designed for that guide.
 
--->
+You will also need to tell the pipeline which reference genome to use for the primer
+design and a prefix string to use for naming the output files.
 
 Now, you can run the pipeline using:
 
@@ -42,7 +37,9 @@ Now, you can run the pipeline using:
 ```bash
 nextflow run pfizer-opensource/nf-crispr-primer-design \
    -profile <docker/singularity/.../institute> \
-   --input samplesheet.csv \
+   --input guides.txt \
+   --genome GRCh38 \
+   --prefix my_guides \
    --outdir <OUTDIR>
 ```
 
@@ -53,18 +50,11 @@ nextflow run pfizer-opensource/nf-crispr-primer-design \
 
 pfizer-opensource/nf-crispr-primer-design was originally written by Jason Arroyo.
 
-We thank the following people for their extensive assistance in the development of this pipeline:
-
-<!-- TODO nf-core: If applicable, make list of people who have also contributed -->
-
 ## Contributions and Support
 
 If you would like to contribute to this pipeline, please see the [contributing guidelines](.github/CONTRIBUTING.md).
 
 ## Citations
-
-<!-- TODO nf-core: Add citation for pipeline after first release. Uncomment lines below and update Zenodo doi and badge at the top of this file. -->
-<!-- If you use pfizer-opensource/nf-crispr-primer-design for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) --><!-- TODO nf-core: Add bibliography of tools and data used in your pipeline -->
 
 An extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.
 
