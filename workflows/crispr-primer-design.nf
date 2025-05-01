@@ -36,7 +36,7 @@ workflow CRISPR_PRIMER_DESIGN {
     // Run primer design tool
     PRIMER_DESIGN(
         Channel.of([:]).merge(ch_input),
-        "genome",
+        Channel.of("genome").merge(DEPLOY_REFERENCE.out.genome_dir),
         PRIMER_DESIGN_CONFIG.out.pd_config
     )
     ch_versions = ch_versions.mix(PRIMER_DESIGN.out.versions)

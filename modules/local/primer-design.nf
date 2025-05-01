@@ -4,7 +4,7 @@ process PRIMER_DESIGN {
 
     input:
         tuple val(meta), path(guide_table)
-        val reference
+        tuple val(reference), path(genome_dir)
         path config
 
     output:
